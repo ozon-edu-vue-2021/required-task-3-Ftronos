@@ -1,8 +1,13 @@
 <template>
   <div id="app">
     <div class="office">
-      <Map :legend="legend" :tables="tables" />
-      <SideMenu :legend="legend" />
+      <Map
+        @tableClicked="showPersonInfo"
+        @notTableClicked="hidePersonInfo"
+        :legend="legend"
+        :tables="tables"
+      />
+      <SideMenu :legend="legend" :person="person" :isUserOpenned.sync="isUserOpenned" />
     </div>
   </div>
 </template>
@@ -12,6 +17,7 @@ import Map from "./components/Map.vue";
 import SideMenu from "./components/SideMenu.vue";
 import legend from "@/assets/data/legend.json";
 import tables from "@/assets/data/tables.json";
+import peoples from "@/assets/data/people.json";
 
 export default {
   name: "App",
@@ -19,6 +25,8 @@ export default {
     return {
       legend: legend,
       tables: tables,
+      person: null,
+      isUserOpenned: false,
     };
   },
   components: {
@@ -31,6 +39,17 @@ export default {
         (tableItem) => tableItem.group_id === legendItem.group_id
       ).length;
     });
+  },
+  methods: {
+    showPersonInfo(id) {
+      this.person = peoples.find((people) => people.tableId === id) ?? null;
+
+      this.isUserOpenned = true;
+    },
+
+    hidePersonInfo() {
+      this.isUserOpenned = false;
+    },
   },
 };
 </script>

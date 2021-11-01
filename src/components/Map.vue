@@ -2,7 +2,7 @@
   <div class="map">
     <h3>Карта офиса</h3>
 
-    <div v-if="!isLoading" class="map-root">
+    <div v-if="!isLoading" @click="handleClick" class="map-root">
       <MapSVG ref="svg" />
     </div>
     <div v-else>Loading...</div>
@@ -14,10 +14,14 @@
 <script>
 import MapSVG from "@/assets/images/map.svg";
 import TableSVG from "@/assets/images/workPlace.svg";
+import ClickOutside from "vue-click-outside";
 import * as d3 from "d3";
 
 export default {
   components: { MapSVG, TableSVG },
+  directives: {
+    ClickOutside,
+  },
   data() {
     return {
       isLoading: false,
@@ -48,6 +52,14 @@ export default {
     }
   },
   methods: {
+    handleClick(e) {
+      if (e.target.closest(".employer-place")) {
+        this.$emit("tableClicked", +e.target.closest(".employer-place").id);
+      } else {
+        this.$emit("notTableClicked");
+      }
+    },
+
     drawTables() {
       const svgTablesGroup = this.g.append("g").classed("groupPlaces", true);
 

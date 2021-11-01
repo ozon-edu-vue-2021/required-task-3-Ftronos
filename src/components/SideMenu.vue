@@ -38,7 +38,7 @@
       <div v-else class="profile">
         <div v-if="!person" class="profile__empty">Место пустое</div>
 
-        <PersonCard :person="person" />
+        <PersonCard v-else :person="person" />
       </div>
     </div>
   </div>
@@ -71,16 +71,19 @@ export default {
     Draggable,
     Doughnut,
   },
-  created() {
-    //this.loadLegend();
-  },
   mounted() {
     this.makeChart();
   },
+  watch: {
+    isUserOpenned(val) {
+      if (!val) {
+        this.$nextTick(function () {
+          this.makeChart();
+        });
+      }
+    },
+  },
   methods: {
-    // loadLegend() {
-    //   this.legend = legend;
-    // },
     closeProfile() {
       this.$emit("update:isUserOpenned", false);
     },
