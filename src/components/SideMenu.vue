@@ -47,7 +47,6 @@
 <script>
 import LegendItem from "./SideMenu/LegendItem.vue";
 import PersonCard from "./SideMenu/PersonCard.vue";
-import legend from "@/assets/data/legend.json";
 import Draggable from "vuedraggable";
 import { Doughnut } from "vue-chartjs";
 
@@ -61,6 +60,10 @@ export default {
       type: Object,
       default: null,
     },
+    legend: {
+      type: Array,
+      default: () => [],
+    },
   },
   components: {
     LegendItem,
@@ -68,21 +71,16 @@ export default {
     Draggable,
     Doughnut,
   },
-  data() {
-    return {
-      legend: [],
-    };
-  },
   created() {
-    this.loadLegend();
+    //this.loadLegend();
   },
   mounted() {
     this.makeChart();
   },
   methods: {
-    loadLegend() {
-      this.legend = legend;
-    },
+    // loadLegend() {
+    //   this.legend = legend;
+    // },
     closeProfile() {
       this.$emit("update:isUserOpenned", false);
     },

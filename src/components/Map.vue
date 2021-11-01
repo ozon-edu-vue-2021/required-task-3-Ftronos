@@ -15,8 +15,6 @@
 import MapSVG from "@/assets/images/map.svg";
 import TableSVG from "@/assets/images/workPlace.svg";
 import * as d3 from "d3";
-import tables from "@/assets/data/tables.json";
-import legend from "@/assets/data/legend.json";
 
 export default {
   components: { MapSVG, TableSVG },
@@ -26,15 +24,22 @@ export default {
       svg: null,
       g: null,
       tableSVG: null,
-      tables: [],
     };
+  },
+  props: {
+    legend: {
+      type: Array,
+      default: () => [],
+    },
+    tables: {
+      type: Array,
+      default: () => [],
+    },
   },
   mounted() {
     this.svg = d3.select(this.$refs.svg);
     this.g = this.svg.select("g");
     this.tableSVG = d3.select(this.$refs.table);
-
-    this.tables = tables;
 
     if (this.g) {
       this.drawTables();
@@ -59,7 +64,7 @@ export default {
           .html(this.tableSVG.html())
           .attr(
             "fill",
-            legend.find((it) => it.group_id === table.group_id)?.color ?? "transparent"
+            this.legend.find((it) => it.group_id === table.group_id)?.color ?? "transparent"
           );
       });
     },
